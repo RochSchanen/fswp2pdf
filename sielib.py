@@ -1,3 +1,9 @@
+# file: sielib.py
+# content: collection of import, export functions for data files
+# Created: 13 December 2024
+# Author: Roch Schanen
+# comments: this library is in constant development
+
 from numpy import loadtxt
 
 version_history = {}
