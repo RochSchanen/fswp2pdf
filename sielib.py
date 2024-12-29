@@ -4,9 +4,11 @@
 # Author: Roch Schanen
 # comments: this library is in constant development
 
-from numpy import loadtxt
-
 version_history = {}
+
+# From "https://numpy.org/"
+# -------------------------
+from numpy import loadtxt
 
 def import_TorsionOscilla_FreqScan_20241213_112400(fp):
 
