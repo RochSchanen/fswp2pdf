@@ -93,7 +93,7 @@ if __name__ == "__main__":
 
         ### import test file ###
         
-        fp = "./fswp_full_1.dat"
+        fp = ".source/fswp_full_1.dat"
         
         print()
         print(f"import file:")
