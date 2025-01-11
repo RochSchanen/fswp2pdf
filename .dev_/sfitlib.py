@@ -7,9 +7,7 @@
 version_history = {}
 
 """ 
-
     development of common fitting functions library for work.
-
 """
 
 # from package: "https://numpy.org/"
@@ -65,7 +63,6 @@ if __name__ == "__main__":
 
         # from package: "https://scipy.org/"
         # ----------------------------------
-
         from scipy.optimize import curve_fit as fit
 
         # import data
@@ -80,6 +77,9 @@ if __name__ == "__main__":
 
         LorentzAbsorptionFitParameters = [88.295, 0.047, 500E-6, 0.0]
         XF = LorentzAbsorption(F, *LorentzAbsorptionFitParameters)
+        
+        LorentzDispersionFitParameters = [88.295, 0.047, 500E-6, 345E-6]
+        YF = LorentzDispersion(F, *LorentzDispersionFitParameters)
 
         # plot data 
 
@@ -90,9 +90,11 @@ if __name__ == "__main__":
         F *= factor_f
 
         # rescale signal data to engineer units
-        factor_xy, prefix_xy = splotlib.GetUnitPrefix(X, XF)
+        factor_xy, prefix_xy = splotlib.GetUnitPrefix(X, XF, Y, YF)
         X  *= factor_xy
         XF *= factor_xy
+        Y  *= factor_xy
+        YF *= factor_xy
 
         # create document
         doc = splotlib.Document("../.output/sfitlib.pdf")
@@ -101,7 +103,10 @@ if __name__ == "__main__":
         splotlib.SelectFigure("myfig", "A4")
         
         # add plot
-        splotlib.Plot("myfig", F, X, F, XF)
+        splotlib.Plot("myfig", F, X, ".b")
+        splotlib.Plot("myfig", F, Y, ".r")
+        splotlib.Plot("myfig", F, XF, "-.c")
+        splotlib.Plot("myfig", F, YF, "-.r")
         
         fn = fp.split("/")[-1]
         splotlib.Text(f"file: '{fn}'", "top")
@@ -109,7 +114,7 @@ if __name__ == "__main__":
         splotlib.Ylabel(f"Signal / {prefix_xy}V")
         
         splotlib.AutoRange("x", F)
-        splotlib.AutoRange("y", X, XF)
+        splotlib.AutoRange("y", X, XF, Y, YF)
         
         splotlib.AutoTick("x")
         splotlib.AutoTick("y")
