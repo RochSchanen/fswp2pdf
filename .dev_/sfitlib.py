@@ -1,6 +1,6 @@
 # file: sfitlib.py
 # content: collection of fitting functions
-# Created: 11 january 2025
+# Created: 11 January 2025
 # Author: Roch Schanen
 # comments: this library is in development
 
@@ -8,38 +8,119 @@ version_history = {}
 
 """ 
 
-    --- motivation ---
+    development of common fitting functions library for work.
 
 """
 
 # from package: "https://numpy.org/"
 # ----------------------------------
 
+from numpy import square
+
 from numpy import pi
 from numpy import cos
 from numpy import sin
 
-# from package: "https://scipy.org/"
-# ----------------------------------
-
-from scipy.optimize import curve_fit as fit
-
 ########################
-## lorentz functions ###
+## Lorentz functions ###
 ########################
 
-# # Aborption
-# def FX(t, p, w, h, o):
-#     x = (t-p)/w
-#     y = h/(1+square(x))
-#     return o + y
+def LorentzAbsorption(t, p, w, h, o):
+    # data, position, width, height, offset
+    x = (t-p)/w
+    y = h/(1+square(x))
+    return o + y
 
-# # Dispersion
-# def FY(t, p, w, h, o):
-#     x = (t-p)/w
-#     y = x*h/(1+square(x))
-#     # inverse sign on request
-#     return o - y
+def LorentzDispersion(t, p, w, h, o):
+    # data, position, width, height, offset
+    x = (t-p)/w
+    y = x*h/(1+square(x))
+    return o - y
+
+version_history["0.0"] = """
+version 0.0 (11 January 2025):
+    add fitting functions: 
+        LorentzAbsorption()
+        LorentzDispersion()
+"""
+
+if __name__ == "__main__":
+
+    ###  display version ###
+
+    current_version = list(version_history.keys())[-1]
+
+    print(f"sfitlib current version: {current_version}")
+    print(f"------------------------")
+
+    print()
+    print(f"history")
+    print(f"-------")
+    for v in version_history.values():
+        print(v)
+
+    """ example codes """
+
+    if current_version == "0.0":
+
+        # from package: "https://scipy.org/"
+        # ----------------------------------
+
+        from scipy.optimize import curve_fit as fit
+
+        # import data
+        
+        from fswp2pdf import sielib
+
+        fp = "../.data/fswp_full_1.dat"
+        info, data = sielib.import_TorsionOscilla_FreqScan_20241213_112400(fp)
+        T, F, X, Y = data
+
+        # manual fit
+
+        LorentzAbsorptionFitParameters = [88.295, 0.047, 500E-6, 0.0]
+        XF = LorentzAbsorption(F, *LorentzAbsorptionFitParameters)
+
+        # plot data 
+
+        from fswp2pdf import splotlib
+
+        # rescale frequency data to engineer units
+        factor_f, prefix_f = splotlib.GetUnitPrefix(F)
+        F *= factor_f
+
+        # rescale signal data to engineer units
+        factor_xy, prefix_xy = splotlib.GetUnitPrefix(X, XF)
+        X  *= factor_xy
+        XF *= factor_xy
+
+        # create document
+        doc = splotlib.Document("../.output/sfitlib.pdf")
+
+        # create figure
+        splotlib.SelectFigure("myfig", "A4")
+        
+        # add plot
+        splotlib.Plot("myfig", F, X, F, XF)
+        
+        fn = fp.split("/")[-1]
+        splotlib.Text(f"file: '{fn}'", "top")
+        splotlib.Xlabel(f"Frequency / {prefix_f}Hz")
+        splotlib.Ylabel(f"Signal / {prefix_xy}V")
+        
+        splotlib.AutoRange("x", F)
+        splotlib.AutoRange("y", X, XF)
+        
+        splotlib.AutoTick("x")
+        splotlib.AutoTick("y")
+        
+        splotlib.AutoGrid()
+
+        # add figure
+        doc.addfigure("myfig")
+
+        # update document
+        doc.updatefile()
 
 # ROTATE BY AN ANGLE "A"
 # def Rotate
@@ -48,7 +129,7 @@ from scipy.optimize import curve_fit as fit
 # xr      = X*cos(a_rad)-Y*sin(a_rad)
 # yr      = X*sin(a_rad)+Y*cos(a_rad)
 # X, Y    = xr, yr
-# # To adjust the lockin, substract the
+# # To adjust the lockin, subtract the
 # # value of a from the lockin phase.
 
 # # define starting parameters and fit
@@ -80,4 +161,3 @@ from scipy.optimize import curve_fit as fit
 # headerText = ""
 # for k in info.keys():
 #     headerText += f"{k:<8}: {info[k]}\n"
-
