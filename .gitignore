@@ -1,7 +1,6 @@
 # .gitignore
-# .source
-# .output
 
+t.py
 __pycache__
 *.egg-info
 build
