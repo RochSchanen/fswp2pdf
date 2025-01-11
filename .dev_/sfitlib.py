@@ -22,20 +22,6 @@ from numpy import pi
 from numpy import cos
 from numpy import sin
 
-#############################
-## Zero crossing function ###
-#############################
-
-def DownZeroCrossing(X):
-    I = X > 0.0
-    C = I[:-1] & ~I[1:]
-    return flatnonzero(C)
-
-def UpZeroCrossing(X):
-    I = X < 0.0
-    C = I[:-1] & ~I[1:]
-    return flatnonzero(C)
-
 ########################
 ## Lorentz functions ###
 ########################
@@ -52,14 +38,32 @@ def LorentzDispersion(t, p, w, h, o):
     y = x*h/(1+square(x))
     return o - y
 
-def LorentzAbsorptionFitStartParameters(T, X):
+#############################
+## Zero crossing function ###
+#############################
+
+def DownZeroCrossing(X):
+    I = X > 0.0
+    C = I[:-1] & ~I[1:]
+    return flatnonzero(C)
+
+def UpZeroCrossing(X):
+    I = X < 0.0
+    C = I[:-1] & ~I[1:]
+    return flatnonzero(C)
+
+##############################
+## Lorentz guess functions ###
+##############################
+
+def LorentzAbsorptionFit_StartParameters(T, X):
     al, ah = argmin(X), argmax(X)
     h = X[ah] - X[al]
     tl = UpZeroCrossing(X - h/2.0)[0]
     th = DownZeroCrossing(X - h/2.0)[0]
     return [T[ah], (T[th] - T[tl])/2.0, h, X[al]]
 
-def LorentzDispersionFitStartParameters(T, Y):
+def LorentzDispersionFit_StartParameters(T, Y):
     al, ah = argmin(Y), argmax(Y)
     return [(T[al]+T[ah])/2.0, (T[al]-T[ah])/2.0, Y[ah]-Y[al], (Y[ah]+Y[al])/2.0]
 
@@ -71,8 +75,8 @@ version 0.0 (11 January 2025):
         LorentzDispersion()
         DownZeroCrossing()
         UpZeroCrossing()
-        LorentzAbsorptionFitStartParameters()
-        LorentzDispersionFitStartParameters()
+        LorentzAbsorptionFit_StartParameters()
+        LorentzDispersionFit_StartParameters()
 """
 
 if __name__ == "__main__":
@@ -106,17 +110,15 @@ if __name__ == "__main__":
         info, data = sielib.import_TorsionOscilla_FreqScan_20241213_112400(fp)
         T, F, X, Y = data
 
-        # [88.295, 0.047, 500E-6, 0.0]
-        pAbs = LorentzAbsorptionFitStartParameters(F, X)
+        # fit data
+
+        pAbs = LorentzAbsorptionFit_StartParameters(F, X)
         pAbs, pAbsCov = fit(LorentzAbsorption, F, X, pAbs)
         XF = LorentzAbsorption(F, *pAbs)
         
-        # [88.295, 0.047, 500E-6, 345E-6]
-        pDis = LorentzDispersionFitStartParameters(F, Y)
+        pDis = LorentzDispersionFit_StartParameters(F, Y)
         pDis, pDisCov = fit(LorentzDispersion, F, Y, pDis) 
         YF = LorentzDispersion(F, *pDis)
-
-        print(pAbs, pDis)
 
         # plot data 
 
@@ -158,6 +160,17 @@ if __name__ == "__main__":
         
         splotlib.AutoGrid()
 
+        text = f"""
+                            Absorption    Dispersion
+
+            position :{pAbs[0]*factor_f:12.3f}{prefix_f}Hz, {pDis[0]*factor_f:12.3f}{prefix_f}Hz
+            width    :{pAbs[1]*factor_f:12.4f}{prefix_f}Hz, {pDis[1]*factor_f:12.4f}{prefix_f}Hz
+            height   :{pAbs[2]*factor_xy:12.3f}{prefix_xy}V, {pDis[2]*factor_xy:12.3f}{prefix_xy}V
+            offset   :{pAbs[3]*factor_xy:12.3f}{prefix_xy}V, {pDis[3]*factor_xy:12.3f}{prefix_xy}V
+        """ 
+
+        splotlib.Text(text, "bottom")
+
         # add figure
         doc.addfigure("myfig")
 
@@ -174,18 +187,8 @@ if __name__ == "__main__":
 # # To adjust the lockin, subtract the
 # # value of a from the lockin phase.
 
-# for l in L[:10]:
-#     t += l[2:]
 # t += f"\nrotation : {-a_deg} degrees"
 # headerText(t, fg)
-
-# # export fit results to footer text
-# t =  f"                   phase      quadrature\n\n"
-# t += f"position :{parX[0]:12.3f}Hz, {parY[0]:12.3f}Hz\n"
-# t += f"width    :{parX[1]:12.3f}Hz, {parY[1]:12.3f}Hz\n"
-# t += f"height   :{parX[2]:12.3f}{s}V, {parY[2]:12.3f}{s}V\n"
-# t += f"offset   :{parX[3]:12.3f}{s}V, {parY[3]:12.3f}{s}V\n"
-# footerText(t, fg)
 
 # headerText = ""
 # for k in info.keys():
