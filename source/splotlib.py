@@ -404,7 +404,7 @@ if __name__ == "__main__":
 
         # import data
         import sielib
-        fp = ".source/fswp_full_1.dat"
+        fp = "../.data/fswp_full_1.dat"
         info, data = sielib.import_TorsionOscilla_FreqScan_20241213_112400(fp)
         T, F, X, Y = data
 
@@ -418,7 +418,7 @@ if __name__ == "__main__":
         Y *= factor_xy
 
         # create document
-        doc = Document(".output/myfig.pdf")
+        doc = Document("../.output/myfig.pdf")
 
         # create figure
         SelectFigure("myfig", "A4")
