@@ -1,0 +1,64 @@
+
+
+---------------------------
+
+pip install [requests]
+
+Upgrade a Package: If you want to upgrade an existing package, use the --upgrade flag:
+pip install --upgrade [requests]
+
+Uninstall a Package: To remove a package, use the pip uninstall command:
+pip uninstall [requests]
+
+---------------------------
+
+
+
+Python Package 2025
+To build a Python package in 2025, you can follow these steps and use the relevant tools and libraries:
+
+Define Your Package Structure: Start by organizing your package directory. This should include an __init__.py file in each subdirectory to make Python treat the directories as containing packages.
+Setup.py: Create a setup.py file to describe your package metadata. This file is crucial for distributing your package using tools like pip. It includes details such as the package name, version, description, author, and dependencies.
+Use Tools for Package Management:
+Poetry: A tool for dependency management and packaging in Python. It simplifies the creation and management of Python projects.
+Flit: Another tool for packaging Python projects. It is simpler than setuptools and wheel and is designed to be easy to use.
+Documentation: Include documentation for your package. Tools like Sphinx can help you generate comprehensive documentation from your source code.
+Testing: Ensure your package is robust by writing tests. Libraries like pytest can help you write and run tests efficiently.
+Continuous Integration (CI): Set up CI using services like GitHub Actions or GitLab CI to automatically test your package on every commit.
+Distribution: Distribute your package using PyPI (Python Package Index). Use twine to upload your package to PyPI.
+Version Control: Use version control systems like Git to manage changes to your package.
+
+
+python -m build
+
+This command will create a dist/ directory containing the .whl and .tar.gz files.
+
+Install Your Package: To test your package, install it in a virtual environment:
+
+pip install dist/your_package_name-0.0.1-py3-none-any.whl
+
+Or, if you prefer the .tar.gz file:
+pip install dist/your_package_name-0.0.1.tar.gz
+
+Upload to PyPI: If you want to make your package available to others, you can upload it to the Python Package Index (PyPI). First, install twine:
+pip install twine
+
+Then, upload your package:
+twine upload dist/*
+
+
+    url="https://github.com/RochSchanen/fswp2pdf",
+    packages = ['fswp2pdf'],
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+
+- To install a package, use python -m pip install . instead of python setup.py install.
+
+- For developing a package in editable mode, use python -m pip install --editable . instead of python setup.py develop.
+
+- To create a source distribution, use python -m build instead of python setup.py sdist.
+
+- To create a wheel distribution, use python -m build instead of python setup.py bdist_wheel.

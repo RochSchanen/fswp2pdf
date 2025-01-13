@@ -77,24 +77,25 @@ def LorentzFitParametersDisplay(pAbs, pDis):
     def leftrimblock(b):
         # count max left spaces
         n = 0 # setup max counter
-        for l in b: # scan through each line
+        for l in b.split("\n"): # scan through each line
             m = len(l) # record line length
             if m: # skip empty lines
                 c = 0 # reset space counter
                 while c < m:
-                    if not l[c]==" ":
+                    if not l[c]==".":
                         break
                     c += 1
-            n = max(n, c) # keep maximum value
+                n = min(n, c) # keep maximum value
 
-        # trim left spaces from block
-        s = f"" # setup string
-        for l in b: # scan through each line
-            s += f"{s}{l[n:]}" # catenate trimmed lines
-
+        print(n)
+        # # trim left spaces from block
+        # s = f"" # setup string
+        # for l in b: # scan through each line
+        #     s += f"{s}{l}" # catenate trimmed lines
+        # print(s)
 
         # done
-        return s
+        return b
 
     # get 
     factor_f,  prefix_f  = 1E0, ""
@@ -102,16 +103,16 @@ def LorentzFitParametersDisplay(pAbs, pDis):
 
     # define output block
     block = f"""
-                      Absorption       Dispersion
-
-        position :{pAbs[0]*factor_f:12.3f}{prefix_f}Hz, {pDis[0]*factor_f:12.3f}{prefix_f}Hz.
-        width    :{pAbs[1]*factor_f:12.3f}{prefix_f}Hz, {pDis[1]*factor_f:12.3f}{prefix_f}Hz.
-        height   :{pAbs[2]*factor_xy:12.3f}{prefix_xy}V, {pDis[2]*factor_xy:12.3f}{prefix_xy}V.
-        offset   :{pAbs[3]*factor_xy:12.3f}{prefix_xy}V, {pDis[3]*factor_xy:12.3f}{prefix_xy}V.
+......................Absorption       Dispersion
+........
+........position :{pAbs[0]*factor_f:12.3f}{prefix_f}Hz, {pDis[0]*factor_f:12.3f}{prefix_f}Hz.
+........width    :{pAbs[1]*factor_f:12.3f}{prefix_f}Hz, {pDis[1]*factor_f:12.3f}{prefix_f}Hz.
+........height   :{pAbs[2]*factor_xy:12.3f}{prefix_xy}V, {pDis[2]*factor_xy:12.3f}{prefix_xy}V.
+........offset   :{pAbs[3]*factor_xy:12.3f}{prefix_xy}V, {pDis[3]*factor_xy:12.3f}{prefix_xy}V.
     """ 
 
     # done
-    return block
+    return leftrimblock(block)
 
 version_history["0.0"] = """
 version 0.0 (11 January 2025)
