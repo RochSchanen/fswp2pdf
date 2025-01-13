@@ -26,13 +26,13 @@ from numpy import sin
 ## Lorentz functions ###
 ########################
 
-def LorentzAbsorption(t, p, w, h, o):
+def LorentzAbsorptionFit_Function(t, p, w, h, o):
     # data, position, width, height, offset
     x = (t-p)/w
     y = h/(1+square(x))
     return o + y
 
-def LorentzDispersion(t, p, w, h, o):
+def LorentzDispersionFit_Function(t, p, w, h, o):
     # data, position, width, height, offset
     x = (t-p)/w
     y = x*h/(1+square(x))
@@ -68,15 +68,71 @@ def LorentzDispersionFit_StartParameters(T, Y):
     return [(T[al]+T[ah])/2.0, (T[al]-T[ah])/2.0, Y[ah]-Y[al], (Y[ah]+Y[al])/2.0]
 
 
+###################################
+## Lorentz parameters to string ###
+###################################
+
+def LorentzFitParametersDisplay(pAbs, pDis):
+
+    def leftrimblock(b):
+        # count max left spaces
+        n = 0 # setup max counter
+        for l in b: # scan through each line
+            m = len(l) # record line length
+            if m: # skip empty lines
+                c = 0 # reset space counter
+                while c < m:
+                    if not l[c]==" ":
+                        break
+                    c += 1
+            n = max(n, c) # keep maximum value
+
+        # trim left spaces from block
+        s = f"" # setup string
+        for l in b: # scan through each line
+            s += f"{s}{l[n:]}" # catenate trimmed lines
+
+
+        # done
+        return s
+
+    # get 
+    factor_f,  prefix_f  = 1E0, ""
+    factor_xy, prefix_xy = 1E6, "u"
+
+    # define output block
+    block = f"""
+                      Absorption       Dispersion
+
+        position :{pAbs[0]*factor_f:12.3f}{prefix_f}Hz, {pDis[0]*factor_f:12.3f}{prefix_f}Hz.
+        width    :{pAbs[1]*factor_f:12.3f}{prefix_f}Hz, {pDis[1]*factor_f:12.3f}{prefix_f}Hz.
+        height   :{pAbs[2]*factor_xy:12.3f}{prefix_xy}V, {pDis[2]*factor_xy:12.3f}{prefix_xy}V.
+        offset   :{pAbs[3]*factor_xy:12.3f}{prefix_xy}V, {pDis[3]*factor_xy:12.3f}{prefix_xy}V.
+    """ 
+
+    # done
+    return block
+
 version_history["0.0"] = """
-version 0.0 (11 January 2025):
-    add fitting functions: 
-        LorentzAbsorption()
-        LorentzDispersion()
-        DownZeroCrossing()
-        UpZeroCrossing()
-        LorentzAbsorptionFit_StartParameters()
-        LorentzDispersionFit_StartParameters()
+version 0.0 (11 January 2025)
+
+    add fitting functions and tools: 
+        
+        - crossing detection:
+            UpZeroCrossing()
+            DownZeroCrossing()
+        
+        - Lorentz Absorption:
+            LorentzAbsorptionFit_Function()
+            LorentzAbsorptionFit_StartParameters()
+        
+        - Lorentz Dispersion
+            LorentzDispersionFit_Function()
+            LorentzDispersionFit_StartParameters()
+
+        - export Lorentz parameters to text string:
+            LorentzFitParametersDisplay()
+
 """
 
 if __name__ == "__main__":
@@ -113,12 +169,12 @@ if __name__ == "__main__":
         # fit data
 
         pAbs = LorentzAbsorptionFit_StartParameters(F, X)
-        pAbs, pAbsCov = fit(LorentzAbsorption, F, X, pAbs)
-        XF = LorentzAbsorption(F, *pAbs)
+        pAbs, pAbsCov = fit(LorentzAbsorptionFit_Function, F, X, pAbs)
+        XF = LorentzAbsorptionFit_Function(F, *pAbs)
         
         pDis = LorentzDispersionFit_StartParameters(F, Y)
-        pDis, pDisCov = fit(LorentzDispersion, F, Y, pDis) 
-        YF = LorentzDispersion(F, *pDis)
+        pDis, pDisCov = fit(LorentzDispersionFit_Function, F, Y, pDis) 
+        YF = LorentzDispersionFit_Function(F, *pDis)
 
         # plot data 
 
@@ -160,16 +216,10 @@ if __name__ == "__main__":
         
         splotlib.AutoGrid()
 
-        text = f"""
-                            Absorption    Dispersion
-
-            position :{pAbs[0]*factor_f:12.3f}{prefix_f}Hz, {pDis[0]*factor_f:12.3f}{prefix_f}Hz
-            width    :{pAbs[1]*factor_f:12.4f}{prefix_f}Hz, {pDis[1]*factor_f:12.4f}{prefix_f}Hz
-            height   :{pAbs[2]*factor_xy:12.3f}{prefix_xy}V, {pDis[2]*factor_xy:12.3f}{prefix_xy}V
-            offset   :{pAbs[3]*factor_xy:12.3f}{prefix_xy}V, {pDis[3]*factor_xy:12.3f}{prefix_xy}V
-        """ 
-
-        splotlib.Text(text, "bottom")
+        splotlib.Text(
+            LorentzFitParametersDisplay(pAbs, pDis),
+            "bottom",
+            )
 
         # add figure
         doc.addfigure("myfig")
