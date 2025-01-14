@@ -22,6 +22,20 @@ from numpy import pi
 from numpy import cos
 from numpy import sin
 
+#############################
+## Zero crossing function ###
+#############################
+
+def DownZeroCrossing(X):
+    I = X > 0.0
+    C = I[:-1] & ~I[1:]
+    return flatnonzero(C)
+
+def UpZeroCrossing(X):
+    I = X < 0.0
+    C = I[:-1] & ~I[1:]
+    return flatnonzero(C)
+
 ########################
 ## Lorentz functions ###
 ########################
@@ -38,24 +52,6 @@ def LorentzDispersionFit_Function(t, p, w, h, o):
     y = x*h/(1+square(x))
     return o - y
 
-#############################
-## Zero crossing function ###
-#############################
-
-def DownZeroCrossing(X):
-    I = X > 0.0
-    C = I[:-1] & ~I[1:]
-    return flatnonzero(C)
-
-def UpZeroCrossing(X):
-    I = X < 0.0
-    C = I[:-1] & ~I[1:]
-    return flatnonzero(C)
-
-##############################
-## Lorentz guess functions ###
-##############################
-
 def LorentzAbsorptionFit_StartParameters(T, X):
     al, ah = argmin(X), argmax(X)
     h = X[ah] - X[al]
@@ -67,58 +63,30 @@ def LorentzDispersionFit_StartParameters(T, Y):
     al, ah = argmin(Y), argmax(Y)
     return [(T[al]+T[ah])/2.0, (T[al]-T[ah])/2.0, Y[ah]-Y[al], (Y[ah]+Y[al])/2.0]
 
-
-###################################
-## Lorentz parameters to string ###
-###################################
-
 def LorentzFitParametersDisplay(pAbs, pDis):
-
+    # import formatting function for plot display
     from fswp2pdf.splotlib import GetUnitPrefix
-
+    # collect parameters explicitly
     P1, P2 = pAbs[0], pDis[0]
     W1, W2 = pAbs[1], pDis[1]
     H1, H2 = pAbs[2], pDis[2]
     O1, O2 = pAbs[3], pDis[3]
-
+    # engineer units formatting
     P_f,  P_p = GetUnitPrefix([P1, P2])
     W_f,  W_p = GetUnitPrefix([W1, W2])
     H_f,  H_p = GetUnitPrefix([H1, H2])
     O_f,  O_p = GetUnitPrefix([O1, O2])
-
-    # define output block
+    # output text
     block = f"""
+                 Absorption, Dispersion
+
         position: {P1*P_f:7.3f}{P_p+'Hz':<2}, {P2*P_f:7.3f}{P_p+'Hz':<2}
         width   : {W1*W_f:6.2f}{W_p+'Hz':<3}, {W2*W_f:6.2f}{W_p+'Hz':<3}
         height  : {H1*H_f:6.2f}{H_p+ 'V':<3}, {H2*H_f:6.2f}{H_p+ 'V':<3}
         offset  : {O1*O_f:6.2f}{O_p+ 'V':<3}, {O2*O_f:6.2f}{O_p+ 'V':<3}
         """
-
-    def padAndTrim(b):
-
-        n, L = 0, b.split('\n')
-        for l in L: n = max(n, len(l))
-        
-        p = f""
-        for l in L: p = f"{p}{l:<{n}}\n"
-
-        for l in p.split("\n"): # scan through each line
-            m = len(l) # record line length
-            if m: # skip empty lines
-                c = 0 # setup space counter
-                while c < m: # less thanend-of-line
-                    if not l[c]==" ": break # spaces not available
-                    c += 1 # increment space counter
-                n = min(n, c) # select minimum value
-
-        q = f"" # setup string
-        for l in p.split("\n"): # scan through each line
-            q = f"{q}\n{l[n:]}" # catenate trimmed lines
-
-        return q
-
     # done
-    return padAndTrim(block)
+    return block
 
 version_history["0.0"] = """
 version 0.0 (11 January 2025)
@@ -170,7 +138,13 @@ if __name__ == "__main__":
         from fswp2pdf import sielib
 
         fp = "../.data/fswp_full_1.dat"
+
         info, data = sielib.import_TorsionOscilla_FreqScan_20241213_112400(fp)
+
+        headerText = ""
+        for k in info.keys():
+            headerText = f"{headerText}{k:<8}: {info[k]}\n"
+
         T, F, X, Y = data
 
         # fit data
@@ -210,45 +184,20 @@ if __name__ == "__main__":
         splotlib.Plot("myfig", F, XF, "-.k", linewidth = 0.6)
         splotlib.Plot("myfig", F, YF, "-.k", linewidth = 0.6)
         
-        fn = fp.split("/")[-1]
-        splotlib.Text(f"file: '{fn}'", "top")
-        splotlib.Xlabel(f"Frequency / {prefix_f}Hz")
-        splotlib.Ylabel(f"Signal / {prefix_xy}V")
-        
         splotlib.AutoRange("x", F)
         splotlib.AutoRange("y", X, XF, Y, YF)
-        
         splotlib.AutoTick("x")
         splotlib.AutoTick("y")
-        
         splotlib.AutoGrid()
 
-        print(LorentzFitParametersDisplay(pAbs, pDis))
+        splotlib.Xlabel(f"Frequency / {prefix_f}Hz")
+        splotlib.Ylabel(f"Signal / {prefix_xy}V")
 
-        splotlib.Text(
-            LorentzFitParametersDisplay(pAbs, pDis),
-            "bottom",
-            )
+        splotlib.Text(headerText, "top")
+        splotlib.Text(LorentzFitParametersDisplay(pAbs, pDis), "bottom")
 
         # add figure
         doc.addfigure("myfig")
 
         # update document
         doc.updatefile()
-
-# ROTATE BY AN ANGLE "A"
-# def Rotate
-# a_deg   = 20.0
-# a_rad   = a_deg*pi/180
-# xr      = X*cos(a_rad)-Y*sin(a_rad)
-# yr      = X*sin(a_rad)+Y*cos(a_rad)
-# X, Y    = xr, yr
-# # To adjust the lockin, subtract the
-# # value of a from the lockin phase.
-
-# t += f"\nrotation : {-a_deg} degrees"
-# headerText(t, fg)
-
-# headerText = ""
-# for k in info.keys():
-#     headerText += f"{k:<8}: {info[k]}\n"

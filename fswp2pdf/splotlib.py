@@ -331,6 +331,7 @@ def Plot(*args, **kwargs):
     return cfa().plot(*args, **kwargs)
 
 def Text(text, position = "top"):
+
     # get plot bounds (in page units)
     l, b, w, h = cfa().get_position().bounds
     # compute position from bounds
@@ -340,14 +341,35 @@ def Text(text, position = "top"):
         "BOTTOM"    : (0.5, b/2),
         "TOP"       : (0.5, b+h+b/2),
     }[position.upper()]
+
+    # space padding and left trimming
+    def padAndTrim(b):
+        n, L = 0, b.split('\n')
+        for l in L: n = max(n, len(l))
+        p = f""
+        for l in L: p = f"{p}{l:<{n}}\n"
+        for l in p.split("\n"): # scan through each line
+            m = len(l) # record line length
+            if m: # skip empty lines
+                c = 0 # setup space counter
+                while c < m: # less thanend-of-line
+                    if not l[c]==" ": break # spaces not available
+                    c += 1 # increment space counter
+                n = min(n, c) # select minimum value
+        q = f"" # setup string
+        for l in p.split("\n"): # scan through each line
+            q = f"{q}\n{l[n:]}" # catenate trimmed lines
+        return q
+
     # instantiate text
-    tx = cfg().text(x, y, text)
+    tx = cfg().text(x, y, padAndTrim(text))
     # setup fonts
     tx.set_fontfamily('monospace')
     tx.set_fontsize("small")
     # setup alignment    
     tx.set_horizontalalignment('center')
     tx.set_verticalalignment('center')
+    
     # done
     return tx
 
