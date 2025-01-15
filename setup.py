@@ -16,7 +16,7 @@ setuptools.setup(
     version="0.0.0",
     author="Roch Schanen",
     author_email="r.schanen@lancaster.ac.uk",
-    description="frequency sweep data file to pdf file: fit, plot and export.",
+    description="export a 'frequency sweep' data-file to a pdf file: plot, fit and display results.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/RochSchanen/fswp2pdf",

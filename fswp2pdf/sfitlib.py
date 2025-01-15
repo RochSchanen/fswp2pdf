@@ -65,7 +65,7 @@ def LorentzDispersionFit_StartParameters(T, Y):
 
 def LorentzFitParametersDisplay(pAbs, pDis):
     # import formatting function for plot display
-    from fswp2pdf.splotlib import GetUnitPrefix
+    from splotlib import GetUnitPrefix
     # collect parameters explicitly
     P1, P2 = pAbs[0], pDis[0]
     W1, W2 = pAbs[1], pDis[1]
@@ -147,7 +147,7 @@ if __name__ == "__main__":
 
         # import data
         
-        from fswp2pdf import sielib
+        import sielib
 
         fp = "../.data/fswp_full_1.dat"
 
@@ -171,7 +171,7 @@ if __name__ == "__main__":
 
         # plot data 
 
-        from fswp2pdf import splotlib
+        import splotlib
 
         # rescale frequency data to engineer units
         factor_f, prefix_f = splotlib.GetUnitPrefix(F)

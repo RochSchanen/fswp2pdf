@@ -1,10 +1,12 @@
 # fswp2pdf
 
-The package fswp2pdf is used to convert a "frequency sweep" data file into a pdf document with a plot of the absorption and dispersion channels and a lorentzian fit to both.
+The package fswp2pdf is used to convert a "frequency sweep" data file into a pdf document. The pdf file contains a plot of the absorption and dispersion channels from the data, a lorentzian fit to both channels and it displays the results parameters.
+
+*fswp2pdf* requires matplotlib, numpy, and scipy.
 
 ## sielib
 
-```
+```python
 
 import_TorsionOscilla_FreqScan_20241213_112400(fp)
 
@@ -45,7 +47,7 @@ Text(text[, position])
 
 ## sfitlib
 
-```
+```python
 
 UpZeroCrossing(X)
 DownZeroCrossing(X)
