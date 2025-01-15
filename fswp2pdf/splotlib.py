@@ -405,6 +405,10 @@ version 0.0
         Text(text[, position])
 """
 
+############
+## infos ###
+############
+
 if __name__ == "__main__":
 
     ###  display version ###
@@ -420,7 +424,9 @@ if __name__ == "__main__":
     for v in version_history.values():
         print(v)
 
-    """ example codes """
+    ################
+    ## tests 0.0 ###
+    ################
 
     if current_version == "0.0":
 
@@ -465,3 +471,9 @@ if __name__ == "__main__":
 
         # update document
         doc.updatefile()
+
+    ################
+    ## tests x.x ###
+    ################
+
+    # ...

@@ -1,0 +1,67 @@
+09/12/2024	14:02:45	Generator: 33521	address: GPIB0::11::INSTR	SR830  address: GPIB0::12::INSTR	sensty:18
+	input:0
+	reserve:1
+	time const: 10
+	slope: 3
+	output: 0,0
+	filters: 0
+	phase: 180
+
+sweep 0  at:	09/12/2024	14:02:45
+09/12/2024	14:08:45	Generator: 33521	address: GPIB0::11::INSTR	SR830  address: GPIB0::12::INSTR	sensty:18
+	input:0
+	reserve:1
+	time const: 10
+	slope: 3
+	output: 0,0
+	filters: 0
+	phase: 180
+
+sweep 1  at:	09/12/2024	14:08:45
+sweep 2  at:	09/12/2024	14:14:46
+sweep 3  at:	09/12/2024	14:20:43
+09/12/2024	14:30:43	Generator: 33521	address: GPIB0::11::INSTR	SR830  address: GPIB0::12::INSTR	sensty:17
+	input:0
+	reserve:1
+	time const: 10
+	slope: 3
+	output: 0,0
+	filters: 0
+	phase: 0
+
+sweep 0  at:	09/12/2024	14:30:43
+09/12/2024	14:41:14	Generator: 33521	address: GPIB0::11::INSTR	SR830  address: GPIB0::12::INSTR	sensty:17
+	input:0
+	reserve:1
+	time const: 10
+	slope: 3
+	output: 0,0
+	filters: 0
+	phase: 0
+
+sweep 0  at:	09/12/2024	14:41:14
+09/12/2024	14:51:14	Generator: 33521	address: GPIB0::11::INSTR	SR830  address: GPIB0::12::INSTR	sensty:17
+	input:0
+	reserve:1
+	time const: 10
+	slope: 3
+	output: 0,0
+	filters: 0
+	phase: 0
+
+sweep 0  at:	09/12/2024	14:51:14
+sweep 1  at:	09/12/2024	14:57:14
+sweep 2  at:	09/12/2024	15:02:35
+sweep 3  at:	09/12/2024	15:07:53
+09/12/2024	15:14:15	Generator: 33521	address: GPIB0::11::INSTR	SR830  address: GPIB0::12::INSTR	sensty:17
+	input:0
+	reserve:1
+	time const: 10
+	slope: 3
+	output: 0,0
+	filters: 0
+	phase: 0
+
+sweep 0  at:	09/12/2024	15:14:15
+sweep 1  at:	09/12/2024	15:19:33
+sweep 2  at:	09/12/2024	15:24:55
