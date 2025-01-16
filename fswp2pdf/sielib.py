@@ -18,9 +18,9 @@ version_history = {}
 from numpy import loadtxt
 
 
-######################################################
-### import_TorsionOscilla_FreqScan_20241213_112400 ###
-######################################################
+##################################################
+# import_TorsionOscilla_FreqScan_20241213_112400 #
+##################################################
 
 def import_TorsionOscilla_FreqScan_20241213_112400(fp):
 
@@ -82,9 +82,9 @@ version 0.0 (13 december 2024):
     add import function: "import_TorsionOscilla_FreqScan_20241213_112400()"
 """
 
-############
-## infos ###
-############
+########
+# info #
+########
 
 if __name__ == "__main__":
 
@@ -101,9 +101,9 @@ if __name__ == "__main__":
     for v in version_history.values():
         print(v)
 
-    ################
-    ## tests 0.0 ###
-    ################
+    #############
+    # tests 0.0 #
+    #############
 
     if current_version == "0.0":
 
@@ -148,8 +148,9 @@ if __name__ == "__main__":
 
         ### done
 
-    ################
-    ## tests x.x ###
-    ################
+    #############
+    # tests x.x #
+    #############
 
-    # ...
+    if current_version == "x.x":
+        pass

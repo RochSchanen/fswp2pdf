@@ -22,9 +22,9 @@ from numpy import pi
 from numpy import cos
 from numpy import sin
 
-#############################
-## Zero crossing function ###
-#############################
+##########################
+# Zero crossing function #
+##########################
 
 def DownZeroCrossing(X):
     I = X > 0.0
@@ -36,9 +36,9 @@ def UpZeroCrossing(X):
     C = I[:-1] & ~I[1:]
     return flatnonzero(C)
 
-########################
-## Lorentz functions ###
-########################
+#####################
+# Lorentz functions #
+#####################
 
 def LorentzAbsorptionFit_Function(t, p, w, h, o):
     # data, position, width, height, offset
@@ -65,7 +65,7 @@ def LorentzDispersionFit_StartParameters(T, Y):
 
 def LorentzFitParametersDisplay(pAbs, pDis):
     # import formatting function for plot display
-    from splotlib import GetUnitPrefix
+    from fswp2pdf.splotlib import GetUnitPrefix
     # collect parameters explicitly
     P1, P2 = pAbs[0], pDis[0]
     W1, W2 = pAbs[1], pDis[1]
@@ -110,15 +110,15 @@ version 0.0 (11 January 2025)
 
 """
 
-########################
-## further functions ###
-########################
+#####################
+# further functions #
+#####################
 
 # ...
 
-############
-## infos ###
-############
+########
+# info #
+########
 
 if __name__ == "__main__":
 
@@ -135,9 +135,9 @@ if __name__ == "__main__":
     for v in version_history.values():
         print(v)
 
-    ################
-    ## tests 0.0 ###
-    ################
+    #############
+    # tests 0.0 #
+    #############
 
     if current_version == "0.0":
 
@@ -214,8 +214,9 @@ if __name__ == "__main__":
         # update document
         doc.updatefile()
 
-    ################
-    ## tests x.x ###
-    ################
+    #############
+    # tests x.x #
+    #############
 
-    # ...
+    if current_version == "x.x":
+        pass

@@ -49,9 +49,9 @@ from numpy import log10
 from numpy import absolute
 from numpy import linspace
 
-########################
-### "Aclass" formats ###
-########################
+####################
+# "Aclass" formats #
+####################
 
 class AClass():
 
@@ -81,9 +81,9 @@ class AClass():
     def PaperSize(self, Format):
         return self.sizes[Format]
 
-####################
-### selectFigure ###
-####################
+################
+# selectFigure #
+################
 
 _CurrentFigure = None
 _CurrentFigureAxes = None
@@ -145,9 +145,9 @@ def cfg():
 def cfa():
     return _CurrentFigureAxes
 
-################
-### Document ###
-################
+############
+# Document #
+############
 
 class Document():
 
@@ -180,9 +180,9 @@ class Document():
             self._closefile()
         return
 
-#####################
-## plot functions ###
-#####################
+##################
+# plot functions #
+##################
 
 def _getTickIntervals(start, stop, ticks):
 
@@ -405,9 +405,9 @@ version 0.0
         Text(text[, position])
 """
 
-############
-## infos ###
-############
+#########
+# infos #
+#########
 
 if __name__ == "__main__":
 
@@ -424,9 +424,9 @@ if __name__ == "__main__":
     for v in version_history.values():
         print(v)
 
-    ################
-    ## tests 0.0 ###
-    ################
+    #############
+    # tests 0.0 #
+    #############
 
     if current_version == "0.0":
 
@@ -472,8 +472,9 @@ if __name__ == "__main__":
         # update document
         doc.updatefile()
 
-    ################
-    ## tests x.x ###
-    ################
+    #############
+    # tests x.x #
+    #############
 
-    # ...
+    if current_version == "x.x":
+        pass
