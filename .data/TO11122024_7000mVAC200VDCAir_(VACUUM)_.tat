@@ -1,0 +1,12 @@
+11/12/2024	16:16:09	Generator: 33521	address: GPIB0::11::INSTR	SR830  address: GPIB0::12::INSTR	sensty:17
+	input:0
+	reserve:1
+	time const: 10
+	slope: 3
+	output: 0,0
+	filters: 0
+	phase: 0
+
+sweep 20  at:	11/12/2024	16:16:09
+sweep 21  at:	11/12/2024	16:29:54
+sweep 22  at:	11/12/2024	16:43:38

@@ -65,7 +65,11 @@ def LorentzDispersionFit_StartParameters(T, Y):
 
 def LorentzFitParametersDisplay(pAbs, pDis):
     # import formatting function for plot display
-    from fswp2pdf.splotlib import GetUnitPrefix
+    try: # import from built
+        from fswp2pdf.splotlib import GetUnitPrefix
+    except ImportError as error:
+        # local import
+        from splotlib import GetUnitPrefix
     # collect parameters explicitly
     P1, P2 = pAbs[0], pDis[0]
     W1, W2 = pAbs[1], pDis[1]
@@ -122,24 +126,40 @@ version 0.0 (11 January 2025)
 
 if __name__ == "__main__":
 
+    _fp = "../.output/sfitlib.txt"
+    _fh = open(_fp, "w")
+    def lprint(*args, **kwargs):
+        print(*args, **kwargs)
+        kwargs["file"] = _fh
+        return print(*args, **kwargs)
+
     ###  display version ###
 
     current_version = list(version_history.keys())[-1]
 
-    print(f"sfitlib current version: {current_version}")
-    print(f"------------------------")
+    lprint(f"sfitlib current version: {current_version}")
+    lprint(f"------------------------")
 
-    print()
-    print(f"history")
-    print(f"-------")
+    lprint()
+    lprint(f"history")
+    lprint(f"-------")
     for v in version_history.values():
-        print(v)
+        lprint(v)
+
+    # test list
+    TESTS = [
+        current_version,
+        # "0.0",
+        # "x.x",
+        ]
 
     #############
     # tests 0.0 #
     #############
 
-    if current_version == "0.0":
+    if "0.0" in TESTS:
+
+        lprint("running test version 0.0")
 
         # from package: "https://scipy.org/"
         # ----------------------------------
@@ -218,5 +238,6 @@ if __name__ == "__main__":
     # tests x.x #
     #############
 
-    if current_version == "x.x":
-        pass
+    if "x.x" in TESTS:
+
+        lprint("running test version x.x")

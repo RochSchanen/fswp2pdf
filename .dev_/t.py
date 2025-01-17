@@ -10,3 +10,8 @@
 
 # t += f"\nrotation : {-a_deg} degrees"
 # headerText(t, fg)
+
+# p = r"\\luna\FST\PY\Milikelvin\He4_fridge\TO\RUN32\Pre-RUN32_NEW_TO_BeCu12\rack15u\Air"
+# print(p.replace(chr(92), chr(47)))
+
+print("0.2" in ["0.0", "0.1"])

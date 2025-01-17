@@ -411,28 +411,50 @@ version 0.0
 
 if __name__ == "__main__":
 
+    _fp = "../.output/splotlib.txt"
+    _fh = open(_fp, "w")
+    def lprint(*args, **kwargs):
+        print(*args, **kwargs)
+        kwargs["file"] = _fh
+        return print(*args, **kwargs)
+
     ###  display version ###
 
     current_version = list(version_history.keys())[-1]
 
-    print(f"splotlib current version: {current_version}")
-    print(f"-------------------------")
+    lprint(f"splotlib current version: {current_version}")
+    lprint(f"-------------------------")
 
-    print()
-    print(f"history")
-    print(f"-------")
+    lprint()
+    lprint(f"history")
+    lprint(f"-------")
     for v in version_history.values():
-        print(v)
+        lprint(v)
+
+    # test list
+    TESTS = [
+        current_version,
+        # "0.0",
+        # "x.x",
+        ]
 
     #############
     # tests 0.0 #
     #############
 
-    if current_version == "0.0":
+    if "0.0" in TESTS:
+
+        lprint("running test version 0.0")
 
         # import data
-        import sielib
+        try: # import from built
+            from fswp2pdf import sielib
+        except ImportError as error:
+            # local import
+            import sielib
+
         fp = "../.data/fswp_full_1.dat"
+
         info, data = sielib.import_TorsionOscilla_FreqScan_20241213_112400(fp)
         T, F, X, Y = data
 
@@ -446,7 +468,7 @@ if __name__ == "__main__":
         Y *= factor_xy
 
         # create document
-        doc = Document("../.output/myfig.pdf")
+        doc = Document("../.output/splotlib.pdf")
 
         # create figure
         SelectFigure("myfig", "A4")
@@ -476,5 +498,7 @@ if __name__ == "__main__":
     # tests x.x #
     #############
 
-    if current_version == "x.x":
-        pass
+    if "x.x" in TESTS:
+
+        lprint("running test version x.x")
+

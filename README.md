@@ -59,3 +59,12 @@ LorentzDispersionFit_StartParameters(T, Y)
 LorentzFitParametersDisplay(pAbs, pDis)
 
 ```
+
+## fswp2pdf
+
+```python
+
+exportSingle()
+exportMultiple()
+
+```

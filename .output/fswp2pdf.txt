@@ -1,0 +1,18 @@
+fswp2pdf current version: 0.1
+-------------------------
+
+history
+-------
+
+version 0.0 (16 January 2025)
+
+    add exportSingle()
+
+
+
+version 0.1 (17 January 2025)
+
+    add exportMultiple()
+
+
+running test version 0.0

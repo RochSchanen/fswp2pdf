@@ -51,7 +51,7 @@ def import_TorsionOscilla_FreqScan_20241213_112400(fp):
         return t
 
     info = {
-        "filename"  :   fp.split("/")[-1],
+        "filename"  :   fp.replace(chr(92), chr(47)).split("/")[-1],
         "filenum"   :   int(file[9:].split()[0]),
         "date"      :   date,
         "time"      :   time,
@@ -88,63 +88,79 @@ version 0.0 (13 december 2024):
 
 if __name__ == "__main__":
 
+    _fp = "../.output/sielib.txt"
+    _fh = open(_fp, "w")
+    def lprint(*args, **kwargs):
+        print(*args, **kwargs)
+        kwargs["file"] = _fh
+        return print(*args, **kwargs)
+
     ###  display version ###
 
     current_version = list(version_history.keys())[-1]
 
-    print(f"sielib current version: {current_version}")
-    print(f"-----------------------")
+    lprint(f"sielib current version: {current_version}")
+    lprint(f"-----------------------")
 
-    print()
-    print(f"history")
-    print(f"-------")
+    lprint()
+    lprint(f"history")
+    lprint(f"-------")
     for v in version_history.values():
-        print(v)
+        lprint(v)
+
+    # test list
+    TESTS = [
+        current_version,
+        # "0.0",
+        # "x.x",
+        ]
 
     #############
     # tests 0.0 #
     #############
 
-    if current_version == "0.0":
+    if "0.0" in TESTS:
+
+        lprint("running test version 0.0")
 
         ### import test file ###
         
         fp = "../.data/fswp_full_1.dat"
         
-        print()
-        print(f"import file:")
-        print(f"------------")
-        print(f"\t'{fp}'")
+        lprint()
+        lprint(f"import file:")
+        lprint(f"------------")
+        lprint(f"\t'{fp}'")
 
         Info, Data = import_TorsionOscilla_FreqScan_20241213_112400(fp)
 
         ### display file info ###
 
-        print()
-        print(f"Info:")
-        print(f"-----")
+        lprint()
+        lprint(f"Info:")
+        lprint(f"-----")
         
         for k in Info.keys():
-            print(f"{k:>10} = '{Info[k]}'")
+            lprint(f"{k:>10} = '{Info[k]}'")
 
         ### display file data ###
 
-        print()
-        print(f"Data:")
-        print(f"-----")
+        lprint()
+        lprint(f"Data:")
+        lprint(f"-----")
         
         T, F, X, Y = Data
 
         # header
-        print(f"{'line':>5}: {'T[s]':>10}, {'F[Hz]':>10}, {'X[V]':>10}, {'Y[V]':>10}")
+        lprint(f"{'line':>5}: {'T[s]':>10}, {'F[Hz]':>10}, {'X[V]':>10}, {'Y[V]':>10}")
         # first lines
         for i in range(3):
-            print(f"{i:5}:{T[i]:10.1f}, {F[i]:10.6f}, {X[i]:10.3e}, {Y[i]:10.3e}")
+            lprint(f"{i:5}:{T[i]:10.1f}, {F[i]:10.6f}, {X[i]:10.3e}, {Y[i]:10.3e}")
         # etc...
-        print(f"{'...':>5}: {'...':>10}, {'...':>10}, {'...':>10}, {'...':>10}")
+        lprint(f"{'...':>5}: {'...':>10}, {'...':>10}, {'...':>10}, {'...':>10}")
         # last lines
         for i in range(T.size-3, T.size):
-            print(f"{i:5}: {T[i]:10.1f}, {F[i]:10.6f}, {X[i]:10.3e}, {Y[i]:10.3e}")
+            lprint(f"{i:5}: {T[i]:10.1f}, {F[i]:10.6f}, {X[i]:10.3e}, {Y[i]:10.3e}")
 
         ### done
 
@@ -152,5 +168,6 @@ if __name__ == "__main__":
     # tests x.x #
     #############
 
-    if current_version == "x.x":
-        pass
+    if "x.x" in TESTS:
+
+        lprint("running test version x.x")
