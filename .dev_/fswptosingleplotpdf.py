@@ -1,8 +1,15 @@
 from time import sleep
 from sys import argv
 
+# argv = [
+#     f"scriptname",
+#     f"E:/schanen/work-python/fswp2pdf/.data/TO11122024_7000mVAC200VDCAir_(VACUUM)__full_23.dat",
+#     f"E:/schanen/work-python/fswp2pdf/.data/TO11122024_7000mVAC200VDCAir_(VACUUM)__full_21.dat",
+#     f"E:/schanen/work-python/fswp2pdf/.data/TO11122024_7000mVAC200VDCAir_(VACUUM)__full_22.dat",
+#     ]
+
 # log path
-_fp = "./export.log"
+_fp = "./singleplot.log"
 
 # log handle
 _fh = open(_fp, "w")
@@ -11,16 +18,6 @@ def lprint(*args, **kwargs):
     print(*args, **kwargs)
     kwargs["file"] = _fh
     return print(*args, **kwargs)
-
-argv = [
-	f"scriptname",
-	f"E:/schanen/work-python/fswp2pdf/.data/TO11122024_7000mVAC200VDCAir_(VACUUM)__full_23.dat",
-	f"E:/schanen/work-python/fswp2pdf/.data/TO11122024_7000mVAC200VDCAir_(VACUUM)__full_21.dat",
-	f"E:/schanen/work-python/fswp2pdf/.data/TO11122024_7000mVAC200VDCAir_(VACUUM)__full_22.dat",
-	]
-
-# lprint(f"from fswp2pdf.fswp2pdf import exportMultiple")
-# from fswp2pdf.fswp2pdf import exportMultiple
 
 lprint(f"processing: ")
 
@@ -39,11 +36,13 @@ N, T, F, X, Y = [], [], [], [], []
 
 for a in argv[1:]:
 
+    lprint(f"import {a}")
+
     info, data = sielib.import_TorsionOscilla_FreqScan_20241213_112400(a)
 
-    headerText = ""
-    for k in info.keys():
-        headerText = f"{headerText}{k:<8}: {info[k]}\n"
+    # headerText = ""
+    # for k in info.keys():
+    #     headerText = f"{headerText}{k:<8}: {info[k]}\n"
 
     n = list(info.values())[0]
 
@@ -75,8 +74,7 @@ for i, x in enumerate(X): X[i] = x*factor_xy
 for i, y in enumerate(Y): Y[i] = y*factor_xy
 
 # create document strip
-# doc = splotlib.Document(fp[:-len(fp.split('.')[-1])]+"pdf")
-doc = splotlib.Document(f"test.pdf")
+doc = splotlib.Document(f"singleplot.pdf")
 
 # create figure
 fg, ax = splotlib.SelectFigure("myfig", "A4")
@@ -87,30 +85,31 @@ m = get_cmap('Set1')
 
 # add plot
 for i, (n, f, x, y) in enumerate(zip(N, F, X, Y)):
-	splotlib.Plot("myfig", f, x, "-", color = m(i), label = n)
-	splotlib.Plot("myfig", f, y, "-", color = m(i))
+    splotlib.Plot("myfig", f, x, "-", color = m(i), label = n)
+    splotlib.Plot("myfig", f, y, "-", color = m(i))
 
 splotlib.legend()
-
-splotlib.AutoRange("x", *F)
-splotlib.AutoRange("y", *X, *Y)
-splotlib.AutoTick("x")
-splotlib.AutoTick("y")
-splotlib.AutoGrid()
 
 splotlib.Xlabel(f"Frequency / {prefix_f}Hz")
 splotlib.Ylabel(f"Signal / {prefix_xy}V")
 
-# splotlib.Text(headerText, "top")
+splotlib.AutoRange("x", *F)
+splotlib.AutoRange("y", *X, *Y)
+
+splotlib.AutoTick("x")
+splotlib.AutoTick("y")
+
+splotlib.AutoGrid()
 
 # add figure
 doc.addfigure("myfig")
 
 # update document
 doc.updatefile()
+# close
 doc.close()
 
 lprint(f"done.")
 _fh.close()
 
-# sleep(2)
+sleep(2)

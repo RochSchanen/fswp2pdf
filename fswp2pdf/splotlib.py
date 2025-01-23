@@ -35,6 +35,7 @@ version_history = {}
 # From "https://matplotlib.org/"
 # ------------------------------
 
+from matplotlib.pyplot import close
 from matplotlib.pyplot import figure
 from matplotlib.pyplot import fignum_exists
 from matplotlib.backends.backend_pdf import PdfPages
@@ -178,6 +179,14 @@ class Document():
                 args = SelectFigure(f)
                 self.filehandle.savefig(args[0])
             self._closefile()
+        return
+
+    def close(self):
+        if self.figures:
+            for f in self.figures:
+                fg, ax = SelectFigure(f)
+                close(fg)
+        self.figures = []
         return
 
 ##################
@@ -329,6 +338,24 @@ def Plot(*args, **kwargs):
         SelectFigure(args[0])
         args = args[1:]
     return cfa().plot(*args, **kwargs)
+
+def legend(*args, position = "top", **kwargs):
+
+    # get plot bounds (in page units)
+    l, b, w, h = cfa().get_position().bounds
+    # compute position from bounds
+    x, y = {
+        "LEFT"      : (    l/2, 0.5),
+        "RIGHT"     : (l+w+l/2, 0.5),
+        "BOTTOM"    : (0.5, b/2),
+        "TOP"       : (0.5, b+h+b/2),
+    }[position.upper()]
+
+    return cfg().legend(
+        loc = 'center',
+        fontsize = 'xx-small',
+        bbox_to_anchor = (x, y),
+        *args, **kwargs)
 
 def Text(text, position = "top"):
 
