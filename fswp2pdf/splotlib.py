@@ -181,6 +181,7 @@ class Document():
             self._closefile()
         return
 
+    # rename close() method to clear()
     def close(self):
         if self.figures:
             for f in self.figures:
