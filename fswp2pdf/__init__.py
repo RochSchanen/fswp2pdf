@@ -12,6 +12,8 @@ version_history = {}
 """ 
     __init__.py
 
+    designed to be used as template for new package modules
+
 """
 
 ###########
@@ -46,6 +48,13 @@ if __name__ == "__main__":
     for v in version_history.values():
         print(v)
 
+    # test list
+    TESTS = [
+        current_version,
+        # "0.0",
+        # "x.x",
+        ]
+
     #############
     # tests 0.0 #
     #############
@@ -53,6 +62,35 @@ if __name__ == "__main__":
     if current_version == "0.0":
 
         print(f"fswp2pdf version is {version}")
+
+        ###########
+        # IMPORTS #
+        ###########
+
+        """ 
+            imports differs when running from the local folder
+            or from the built library. Try one or the other and
+            swap if not found.
+        """
+
+        # # from the local package
+        # # ----------------------
+        # try:
+
+        #     # import from built
+        #     # -----------------
+        #     from fswp2pdf import sielib
+        #     from fswp2pdf import splotlib
+        #     from fswp2pdf import sfitlib
+
+        # except ImportError as error:
+
+        #     # import from .
+        #     # -------------
+        #     import sielib
+        #     import splotlib
+        #     import sfitlib
+
         print("done.")
 
     #############
